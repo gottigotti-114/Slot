@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>ジャグラー</title>
+ <style>
+  
+  /*ここからメインフレーム関連*/
+  #main_frame{
+   text-align: center;
+   margin: auto;
+   border: 20px solid silver;
+   background-color: coral;
+   max-width: 600px;
+  }
+  /*ここから表示テキスト関連*/
+  #data_frame{
+   border: 1px solid black;
+   padding: 30px;
+   margin: auto;
+   margin-top: 10px;
+   width: 450px;
+   background-color: brown;
+   box-shadow: inset 4px 4px 20px rgba(0,0,0,0.5);
+   border: 9px solid transparent;
+   border-image: linear-gradient(to right, #fff, #ccc, #999) 1;
+  }
+  #text_message{
+   font-size: 20px;
+   color: white;
+   text-decoration: bold;
+
+  }
+
+  /*ここから子役表示関連*/
+  #slot_frame {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   width: 400px;
+   margin: auto;
+   margin-top: 20px;
+   height: 100px;
+  }
+  .slot{
+   font-size: 60px;
+   background-color: rgb(209, 208, 208);
+   border-radius: 30px;
+   padding: 10px;
+   border: 8px solid gold;
+   box-shadow: 2px 2px 20px rgba(0,0,0,0.3);
+  }
+
+  /*ここからボタン関連*/
+  #button_frame_all{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   margin-left: 50px;
+
+  }
+  #button_frame{
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+   width: 400px;
+   margin-top: 20px;
+   height: 100px;
+  }
+  .button{
+   background-image: url(./images/button_default.png);
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-position: center;
+   padding: 30px;
+  }
+  .button:active{
+   background-image: url(./images/button_pushed.png);
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-position: center;
+   padding: 30px;
+  }
+  #rever{
+   background-image: url(./images/rever_off.png);
+   background-size: contain;
+   background-repeat: no-repeat;
+   background-position: center;
+   padding: 50px 26px 50px 26px;
+   border: 2px solid aquamarine;
+   border-radius: 20px;
+   background-color: silver;
+   box-shadow: inset 3px 3px 4px rgba(0,0,0,0.4);
+  }
+
+  #rever:active {
+   background-image: url(./images/rever_on.png);
+  }
+  
+
+  /*ここから一覧表関連*/
+  #number_data_frame{
+   display: flex;
+   justify-content: space-around;
+   background-color: rgba(0,0,0,0.3);
+   margin: 20px;
+   flex-wrap: nowrap;
+  }
+  #number_data_frame p{
+   color: white;
+   font-size: 14px;
+  }
+  table{
+   border-collapse: collapse;
+   border: 1px solid white;
+  }
+  table th {
+   border-bottom: 1px double white;
+   padding:10px;
+   background-color: rgb(214, 168, 168);
+  }
+  table td {
+   border: 1px solid rgb(0, 0, 0);
+   background-color: white;
+  }
+  
+ </style>
+</head>
+<body>
+ <h1>ジャグラー</h1>
+ <div id="main_frame">
+  <div id="data_frame">
+   <div class="data" id="text_message">回そう！</div>
+   <div class="data"><span id="pt_message">100</span>pt</div>
+  </div>
+  <div id="slot_frame">
+   <div class="slot" id="slot1">🍌</div>
+   <div class="slot" id="slot2">🍎</div>
+   <div class="slot" id="slot3">🍇</div>
+  </div>
+  <div id="button_frame_all">
+   <div id="button_frame">
+    <div class="button" id="button1"></div>
+    <div class="button" id="button2"></div>
+    <div class="button" id="button3"></div>
+   </div>
+   <div id="rever"></div>
+  </div>
+  <div id="number_data_frame">
+   <div class="number_data">
+    <p>獲得ポイント一覧</p>
+    <table>
+     <thead>
+      <tr>
+       <th>回数目</th>
+       <th>pt</th>
+      </tr>
+     </thead>
+     <tbody id="pushed_table">
+
+     </tbody>
+    </table>
+   </div>
+   <div class="number_data" id="kakuritu_table">
+    <p>確率表</p>
+    <table>
+     <tr>
+      <th>子役</th>
+      <th>確率</th>
+     </tr>
+    </table>
+   </div>
+  </div>
+ </div>
+ <script type="module">
+  import {Home_controller} from "./js/Home_controller.js";
+
+  let count = 0;
+  let slot1 = document.getElementById("slot1");
+  let slot2 = document.getElementById("slot2");
+  let slot3 = document.getElementById("slot3");
+  let button1 = document.getElementById("button1");
+  let button2 = document.getElementById("button2");
+  let button3 = document.getElementById("button3");
+  const symbols = ["🍎","🍌","🍇","🍒","🍈","🍉","💎","😎"];
+  const point_symbols = {
+   "🍎": 50,
+   "🍌": 50,
+   "🍇": 60,
+   "🍒": 40,
+   "🍈": 70,
+   "🍉": 100,
+   "💎": 1000,
+   "😎": 10000
+  };
+  const kakuritu_parameter = {
+   "🍎": 1000,
+   "🍌": 100,
+   "🍇": 100,
+   "🍒": 120,
+   "🍈": 70,
+   "🍉": 60,
+   "💎": 40,
+   "😎": 100
+  };
+
+  let slot = new Home_controller(slot1,slot2,slot3,button1,button2,button3,symbols,point_symbols);
+  slot.setKakuritus(kakuritu_parameter);
+
+  button1.addEventListener("click",() => {
+   slot.pushed_button1();
+   outPut();
+  });
+  button2.addEventListener("click", () => {
+   slot.pushed_button2();
+   outPut();
+  });
+
+  button3.addEventListener("click",() => {
+   slot.pushed_button3();
+   outPut();
+  });
+
+  rever.addEventListener("click",() => {
+   slot.pushed_rever();
+  });
+
+  function outPut() {
+   setTimeout(() => {
+    upDate();
+    const symbol = document.getElementById("slot1").textContent;
+    if(slot.slot_finish()){
+     count += 1;
+     document.getElementById("text_message").textContent = compareMessage(slot.getReview());
+     
+     document.getElementById("pt_message").textContent = Number(document.getElementById("pt_message").textContent) + Number(slot.getPoint(symbol));
+     console.log("getPoint is:" + slot.getPoint(symbol));
+     tableAddPoint(symbol,Number(slot.getPoint(symbol)));
+    }
+   },500);
+  }
+
+  function upDate() {
+
+   window.slot1 = document.getElementById("slot1");
+   window.slot2 = document.getElementById("slot2");
+   window.slot3 = document.getElementById("slot3");
+   window.button1 = document.getElementById("button1");
+   window.button2 = document.getElementById("button2");
+   window.button3 = document.getElementById("button3");
+   window.slot = new Home_controller(slot1,slot2,slot3,button1,button2,button3,symbols,point_symbols);
+   window.slot.setKakuritus(kakuritu_parameter);
+  }
+
+  function compareMessage(thing) {
+   if(thing == "A"){
+    return "😎😍リーチ😍😎";
+   }else if(thing == "B"){
+    return "😒😮ニアミス😮😒";
+   }else {
+    return "😢😔ハズレ😔😢";
+   }
+  }
+
+  function tableAddPoint(symbol,point){
+   if(point > 0){
+    const table = document.getElementById("pushed_table");
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+
+    td1.textContent = symbol;
+    td2.textContent = point;
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+
+    table.appendChild(tr);
+   }
+  }
+
+ </script>
+</body>
+</html>
