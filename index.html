@@ -14,6 +14,27 @@
    background-color: coral;
    max-width: 600px;
   }
+  /*ここからステータステキスト関連*/
+  #status_frame{
+   width: 550px;
+   margin: auto;
+
+  }
+  #status_frame_table{
+   overflow-x: scroll;
+  }
+  #status_frame_table table td{
+   white-space: nowrap;
+  }
+  #status_frame_table button{
+   background-image: linear-gradient(to right ,rgb(222, 204, 103),rgb(174, 166, 119),rgb(118, 106, 35));
+   color: white;
+   box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+   width: 120px;
+  }
+  #trNo1, #trNo2, #trNo3{
+   display: none;
+  }
   /*ここから表示テキスト関連*/
   #data_frame{
    border: 1px solid black;
@@ -31,6 +52,32 @@
    color: white;
    text-decoration: bold;
 
+  }
+  #multiplier_message{
+    text-align: right;
+  }
+  #multiplier{
+    width: 100px;
+    padding: 10px 20px;
+    border: 10px solid rgba(151, 151, 79, 0.534);
+    box-shadow: 1px 1px 20px rgba(0,0,0,0.6);
+    border-radius: 10px;
+
+    animation: rainbow 0.3s infinite;
+  }
+
+  @keyframes rainbow {
+    0%   { background-color: red; font-size: 15px;}
+    14%  { background-color: orange; font-size: 17px;}
+    28%  { background-color: yellow; font-size: 18px; }
+    42%  { background-color: green; font-size: 19px; }
+    57%  { background-color: blue; font-size: 20px; }
+    71%  { background-color: indigo; font-size: 19px; }
+    85%  { background-color: violet; font-size: 18px; }
+    100% { background-color: red; font-size: 17px; } /* ループのために戻す */
+  }
+  @keyframes normal {
+    100% { background-color: white; }
   }
 
   /*ここから子役表示関連*/
@@ -125,6 +172,7 @@
    background-color: white;
   }
 
+  /*ここからレスポンシブデザイン*/
   @media (max-width: 500px) {
    #main_frame{
     max-width: 500px;
@@ -167,14 +215,49 @@
 <body>
  <h1>ジャグラー</h1>
  <div id="main_frame">
+  <div id="status_frame">
+   <div id="status_frame_button">
+    <button id="selectNo1" onclick="changeTrNo1()">確率を上げる</button>
+    <button id="selectNo2" onclick="changeTrNo2()">倍率を上げる</button>
+    <button id="selectNo3" onclick="changeTrNo3()">バフを付ける</button>
+   </div>
+   <div id="status_frame_table">
+    <table>
+     <tr id="trNo1">
+      <td>🍎の確率を上げる<br>現在の確率：<span id="kakuritu_1"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍎',5)">5UP</button></td>
+      <td>🍌の確率を上げる<br>現在の確率：<span id="kakuritu_2"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍌',5)">5UP</button></td>
+      <td>🍇の確率を上げる<br>現在の確率：<span id="kakuritu_3"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍇',5)">5UP</button></td>
+      <td>🍒の確率を上げる<br>現在の確率：<span id="kakuritu_4"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍒',4)">4UP</button></td>
+      <td>🍈の確率を上げる<br>現在の確率：<span id="kakuritu_5"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍈',3)">3UP</button></td>
+      <td>🍉の確率を上げる<br>現在の確率：<span id="kakuritu_6"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('🍉',3)">3UP</button></td>
+      <td>💎の確率を上げる<br>現在の確率：<span id="kakuritu_7"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('💎',2)">2UP</button></td>
+      <td>😎の確率を上げる<br>現在の確率：<span id="kakuritu_8"></span>%<br><button onclick="if(usePoint(5)) window.kakurituUp('😎',1)">1UP</button></td>
+     </tr>
+     <tr id="trNo2">
+      <td>🍎のPt倍率を上げる<br>取得できるPt：<span id="point_1"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍎',5)">5%UP</button></td>
+      <td>🍌のPt倍率を上げる<br>取得できるPt：<span id="point_2"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍌',5)">5%UP</button></td>
+      <td>🍇のPt倍率を上げる<br>取得できるPt：<span id="point_3"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍇',5)">5%UP</button></td>
+      <td>🍒のPt倍率を上げる<br>取得できるPt：<span id="point_4"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍒',5)">5%UP</button></td>
+      <td>🍈のPt倍率を上げる<br>取得できるPt：<span id="point_5"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍈',5)">5%UP</button></td>
+      <td>🍉のPt倍率を上げる<br>取得できるPt：<span id="point_6"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('🍉',5)">5%UP</button></td>
+      <td>💎のPt倍率を上げる<br>取得できるPt：<span id="point_7"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('💎',5)">5%UP</button></td>
+      <td>😎のPt倍率を上げる<br>取得できるPt：<span id="point_8"></span>Pt<br><button onclick="if(usePoint(5)) window.pointUp('😎',5)">5%UP</button></td>
+     </tr>
+     <tr id="trNo3">
+      <td>サンプル</td>
+     </tr>
+    </table>
+   </div>
+  </div>
   <div id="data_frame">
    <div class="data" id="text_message">回そう！</div>
-   <div class="data"><span id="pt_message">100</span>pt</div>
+   <div class="data"><span id="pt_message">10000</span>pt</div>
+   <div id="multiplier_message"><span id="multiplier">aaa</span></div>
   </div>
   <div id="slot_frame">
-   <div class="slot" id="slot1">🍌</div>
+   <div class="slot" id="slot1">🍎</div>
    <div class="slot" id="slot2">🍎</div>
-   <div class="slot" id="slot3">🍇</div>
+   <div class="slot" id="slot3">🍎</div>
   </div>
   <div id="button_frame_all">
    <div id="button_frame">
@@ -210,18 +293,69 @@
    </div>
   </div>
  </div>
+ <script>
+  //----------ステータステキストのボタン関連----------//
+  
+  //ボタン１を押したとき、trNo1のみを開く（表示）
+  function changeTrNo1(){
+    
+   const doc = document.getElementById("trNo1");
+   if(doc.style.display == "none"){
+    allNone();
+    doc.style.display = "table-row";
+   }else{
+    allNone();   
+   }
+  }
+  //ボタン２を押したとき、trNo2だけを開く（表示）
+  function changeTrNo2(){
+   const doc = document.getElementById("trNo2");
+   if(doc.style.display == "none"){
+    allNone();
+    doc.style.display = "table-row";
+   }else{
+    allNone();   
+   }  
+  }
+  //ボタン３を押したとき、trNo3だけを開く（表示）
+  function changeTrNo3(){
+   const doc = document.getElementById("trNo3");
+   if(doc.style.display == "none"){
+    allNone();
+    doc.style.display = "table-row";
+   }else{
+    allNone();
+   }  
+  }
+
+  //テーブルのtrNo1,2,3を全て閉じる（非表示）
+  function allNone() {
+    upDate();
+   document.getElementById("trNo1").style.display = "none";
+   document.getElementById("trNo2").style.display = "none";
+   document.getElementById("trNo3").style.display = "none";
+
+  }
+ </script>
+
  <script type="module">
+  //----------外部からのインポート----------//
+
+  //./js/にあるJavaScriptファイルをインポートする。スロットを動かすためのインスタンス=> slotインスタンス
   import {Home_controller} from "./js/Home_controller.js";
 
-  let count = 0;
-  let slot1 = document.getElementById("slot1");
-  let slot2 = document.getElementById("slot2");
-  let slot3 = document.getElementById("slot3");
-  let button1 = document.getElementById("button1");
-  let button2 = document.getElementById("button2");
-  let button3 = document.getElementById("button3");
-  const symbols = ["🍎","🍌","🍇","🍒","🍈","🍉","💎","😎"];
-  const point_symbols = {
+  //----------変数定義----------//
+
+  let pointHelpFlag = false;                        //ポイント付与を1Gにつき1回とする
+  let count = 0;                                    //1Gを1カウントとして記録していく
+  let slot1 = document.getElementById("slot1");     //リール１をslot1とする
+  let slot2 = document.getElementById("slot2");     //リール２をslot2とする
+  let slot3 = document.getElementById("slot3");     //リール３をslot3とする
+  let button1 = document.getElementById("button1"); //リール１に対するリール停止ボタンをbutton1とする
+  let button2 = document.getElementById("button2"); //リール２に対するリール停止ボタンをbutton2とする
+  let button3 = document.getElementById("button3"); //リール３に対するリール停止ボタンをbutton3とする
+  const symbols = ["🍎","🍌","🍇","🍒","🍈","🍉","💎","😎"]; //スロットの子役（シンボル）
+  const point_symbols = { //シンボル事の付与ポイント数
    "🍎": 50,
    "🍌": 50,
    "🍇": 60,
@@ -231,53 +365,116 @@
    "💎": 1000,
    "😎": 10000
   };
-  const kakuritu_parameter = {
-   "🍎": 1000,
+  const kakuritu_parameter = { //Kakuritu_controllerで必要とする確率パラメーター。数値が大きいシンボルほど出現割合が大きい
+   "🍎": 100,
    "🍌": 100,
    "🍇": 100,
-   "🍒": 120,
+   "🍒": 80,
    "🍈": 70,
    "🍉": 60,
    "💎": 40,
-   "😎": 100
+   "😎": 30
   };
 
+  //スロット全体をコントロールするのに必要なインスタンス
+  //引数（リール１,リール２,リール３,リール停止ボタン１,リール停止ボタン２,リール停止ボタン３,シンボル,付与ポイントシンボル
   let slot = new Home_controller(slot1,slot2,slot3,button1,button2,button3,symbols,point_symbols);
+  //setKakuritusメソッドで確率パラメータをセットする=>シンボルの出現確率が調整される
   slot.setKakuritus(kakuritu_parameter);
 
+  //----------イベント発生時の処理----------//
+
+  //リール停止ボタン１を押したとき
   button1.addEventListener("click",() => {
    slot.pushed_button1();
    outPut();
+   upDate();
   });
+  //リール停止ボタン２を押したとき
   button2.addEventListener("click", () => {
    slot.pushed_button2();
    outPut();
+   upDate();
   });
 
+  //リール停止ボタンを押したとき
   button3.addEventListener("click",() => {
    slot.pushed_button3();
    outPut();
+   upDate();
   });
 
+  //レバーオン時
   rever.addEventListener("click",() => {
-   slot.pushed_rever();
+    pointHelpFlag = true;
+   if(usePoint(5)){
+    slot.pushed_rever();
+    upDate();
+   }
   });
 
+  //keydown系イベント処理
+  document.addEventListener("keydown", (event) => {
+
+    //スペースキーでリールを順に止める機能
+    if(event.code == 'Space' || slot.getStatus() == "spinNow"){
+      console.log(slot.Slot1_spin_now());
+      if(slot.Slot1_spin_now() == true){
+        slot.pushed_button1();
+        outPut();
+        upDate();
+      }else if(slot.Slot2_spin_now() == true){
+        slot.pushed_button2();
+        outPut();
+        upDate();
+      }else if(slot.Slot3_spin_now() == true){
+        slot.pushed_button3();
+        outPut();
+        upDate();
+      }
+      upDate();
+    }
+
+    //Enterキーでレバーオン機能
+    if(event.code == 'Enter') {
+      pointHelpFlag = true;
+      if(usePoint(5)){
+        slot.pushed_rever();
+        upDate();
+      }
+      document.getElementById("rever").style.backgroundImage = "url('./images/rever_on.png')";
+      setTimeout(() => {
+        document.getElementById("rever").style.backgroundImage = "";
+        upDate();
+      },150);
+    }
+  });
+
+
+  //----------スロット全体の数値データ操作----------//
+
+  //リールがすべて止まった時の処理（テキストメッセージ、ポイント付与、テーブルにデータ追加、カウントアップetc）
   function outPut() {
    setTimeout(() => {
     upDate();
     const symbol = document.getElementById("slot1").textContent;
-    if(slot.slot_finish()){
-     count += 1;
-     document.getElementById("text_message").textContent = compareMessage(slot.getReview());
-     
-     document.getElementById("pt_message").textContent = Number(document.getElementById("pt_message").textContent) + Number(slot.getPoint(symbol));
-     console.log("getPoint is:" + slot.getPoint(symbol));
-     tableAddPoint(symbol,Number(slot.getPoint(symbol)));
+    if(slot.slot_finish() && pointHelpFlag == true){
+      if(pointHelpFlag == true){
+        pointHelpFlag = false;
+      }
+      if(pointHelpFlag == false){
+        count += 1;
+        document.getElementById("text_message").textContent = compareMessage(slot.getReview());
+        
+        document.getElementById("pt_message").textContent = Number(document.getElementById("pt_message").textContent) + Number(slot.getPoint(symbol));
+        console.log("getPoint is:" + slot.getPoint(symbol));
+        tableAddPoint(symbol,Number(slot.getPoint(symbol)));
+      }
     }
    },500);
   }
 
+  //スロット状態やボタンの状態、インスタンスの状態、ステータステキストの数値データ、ポイントの状態などを更新し、反映する）
   function upDate() {
 
    window.slot1 = document.getElementById("slot1");
@@ -288,8 +485,15 @@
    window.button3 = document.getElementById("button3");
    window.slot = new Home_controller(slot1,slot2,slot3,button1,button2,button3,symbols,point_symbols);
    window.slot.setKakuritus(kakuritu_parameter);
+   Debug();
+   outputKakuritu();
+   outputPoint();
   }
+  window.upDate = upDate;
 
+  //----------頻繁に使われるメソッド部----------//
+
+  //テキストメッセージに表示する告知演出を返す。（引数：評価）
   function compareMessage(thing) {
    if(thing == "A"){
     return "😎😍リーチ😍😎";
@@ -300,6 +504,7 @@
    }
   }
 
+  //number_data_frameにある獲得ポイント一覧にデータを一件追加する。（引数：シンボル、付与ポイント）
   function tableAddPoint(symbol,point){
    if(point > 0){
     const table = document.getElementById("pushed_table");
@@ -316,6 +521,105 @@
    }
   }
 
+  //指定したシンボルの確率パラメータを増やしたり減らしたりする（引数：シンボル、増減数値）
+  function kakurituUp(symbol,value){
+   slot.setKakuritu(symbol,value);
+   upDate();
+  }
+  window.kakurituUp = kakurituUp;
+
+  //指定したvalue(パーセンテージ)分、ポイント付与数を増やす（引数：シンボル、何パーセント増やすか）
+  function pointUp(symbol,value){
+   point_symbols[symbol] = Math.floor(point_symbols[symbol] * (1 + (value / 100.0)));
+   upDate();
+  }
+  window.pointUp = pointUp;
+
+  //コンソールに表示させるテキストを決める。upDate()メソッド毎に実行される
+  function Debug() {
+    //確率シンボルを表示
+    //const kakuritu = slot.getKakuritus();
+    //console.log(kakuritu);
+    console.log(slot.Slot1_spin_now());
+    console.log("slot spin is finish : " + slot.slot_finish())
+  }
+
+  //指定したシンボルが何パーセントの確率で出現するのかを返す
+  function ParsentKakuritu(symbol) {
+    const symbols = slot.getKakuritu().kakuritu_before;
+    const mySymbolValue = slot.getKakuritu().kakuritu_before[symbol];
+
+    let total = 0;
+    for(let key in symbols) {
+        const value = symbols[key];
+        total += value;
+    }
+    return Math.floor((mySymbolValue / total) * 100);
+  }
+
+  //----------ステータステキストの数値反映----------//
+
+  //ステータステキストのセル一つ一つにシンボル毎の確率を表示させる
+  function outputKakuritu() {
+    const kakuritu1 = document.getElementById("kakuritu_1");
+    const kakuritu2 = document.getElementById("kakuritu_2");
+    const kakuritu3 = document.getElementById("kakuritu_3");
+    const kakuritu4 = document.getElementById("kakuritu_4");
+    const kakuritu5 = document.getElementById("kakuritu_5");
+    const kakuritu6 = document.getElementById("kakuritu_6");
+    const kakuritu7 = document.getElementById("kakuritu_7");
+    const kakuritu8 = document.getElementById("kakuritu_8");
+
+    kakuritu1.textContent = ParsentKakuritu("🍎");
+    kakuritu2.textContent = ParsentKakuritu("🍌");
+    kakuritu3.textContent = ParsentKakuritu("🍇");
+    kakuritu4.textContent = ParsentKakuritu("🍒");
+    kakuritu5.textContent = ParsentKakuritu("🍈");
+    kakuritu6.textContent = ParsentKakuritu("🍉");
+    kakuritu7.textContent = ParsentKakuritu("💎");
+    kakuritu8.textContent = ParsentKakuritu("😎");
+  }
+
+  //ステータステキストのセル一つ一つにシンボル毎の付与ポイント数を表示させる
+  function outputPoint() {
+    const point1 = document.getElementById("point_1");
+    const point2 = document.getElementById("point_2");
+    const point3 = document.getElementById("point_3");
+    const point4 = document.getElementById("point_4");
+    const point5 = document.getElementById("point_5");
+    const point6 = document.getElementById("point_6");
+    const point7 = document.getElementById("point_7");
+    const point8 = document.getElementById("point_8");
+
+    point1.textContent = point_symbols["🍎"];
+    point2.textContent = point_symbols["🍌"];
+    point3.textContent = point_symbols["🍇"];
+    point4.textContent = point_symbols["🍒"];
+    point5.textContent = point_symbols["🍈"];
+    point6.textContent = point_symbols["🍉"];
+    point7.textContent = point_symbols["💎"];
+    point8.textContent = point_symbols["😎"];
+  }
+
+  //----------ポイントの使用時の処理----------//
+
+  //もしポイントが無かったらfalseを返す。もしポイントが使えるならtrueを返し、引数分ポイントを消費する。
+  function usePoint(point=0) {
+    const now = Number(document.getElementById("pt_message").textContent);
+
+    if(now <= 0){
+        document.getElementById("text_message").textContent = "ポイントが足りないよ！";
+        return false;
+    }else{
+        if(point > 0){
+            document.getElementById("text_message").textContent = point + "Pt使いました";
+        }
+        let usePoint = Number(now) - point;
+        document.getElementById("pt_message").textContent = String(usePoint);
+        return true;
+    }
+  }
+  window.usePoint = usePoint;
  </script>
 </body>
 </html>

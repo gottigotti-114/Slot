@@ -22,7 +22,7 @@ export class Kakuritu_controller{
   }
  }
 
- getKakuritu() {
+ getKakuritus() {
   return this.kakuritu_after;
  }
 
@@ -67,3 +67,20 @@ export class Kakuritu_controller{
   return kakuritu;
  }
 }
+
+//test
+
+// const kakuritu_parameter = {
+//    "🍎": 1000,
+//    "🍌": 100,
+//    "🍇": 100,
+//    "🍒": 120,
+//    "🍈": 70,
+//    "🍉": 60,
+//    "💎": 40,
+//    "😎": 100
+// };
+
+// k = new Kakuritu_controller( kakuritu_parameter );
+
+// console.log( k.getKakuritus() );

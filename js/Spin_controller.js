@@ -1,21 +1,18 @@
 import {Random_symbol} from "./Random_symbol.js";
 import {Kakuritu_controller} from "./Kakuritu_controller.js";
 export class Spin_controller{
- #slot;
- #kakuritu;
- #random;
  constructor(speed,symbols,slot,parameter=null){
   this.speed = speed;
   this.symbols = symbols;
-  this.stopped = false;
+  this.stopped = true;
   this.plusCount = 0;
-  this.#slot = slot;
+  this.slot = slot;
   if(parameter==null){
-   this.#kakuritu = new Kakuritu_controller(Kakuritu_controller.default_parameter(this.symbols));
-   this.#random = new Random_symbol( this.#kakuritu.getKakuritu() );
+   this.kakuritu = new Kakuritu_controller(Kakuritu_controller.default_parameter(this.symbols));
+   this.random = new Random_symbol( this.kakuritu.getKakuritus() );
   }else{
-   this.#kakuritu = new Kakuritu_controller(parameter);
-   this.#random = new Random_symbol( this.#kakuritu.getKakuritu());
+   this.kakuritu = new Kakuritu_controller(parameter);
+   this.random = new Random_symbol( this.kakuritu.getKakuritus());
   }
  }
 
@@ -25,8 +22,8 @@ export class Spin_controller{
    if(this.stopped == true) {
     clearInterval(interval);
    }
-   this.#random = new Random_symbol( this.#kakuritu.getKakuritu());
-   this.#slot.textContent = this.#random.out();
+   this.random = new Random_symbol( this.kakuritu.getKakuritus());
+   this.slot.textContent = this.random.out();
   },this.speed);
  }
 
@@ -35,10 +32,10 @@ export class Spin_controller{
  }
 
  setKakuritus( kakuritu_parameter ) {
-  this.#kakuritu.setKakuritu( kakuritu_parameter );
+  this.kakuritu.setKakuritu( kakuritu_parameter );
  }
 
  setKakuritu( key, value ){
-  this.#kakuritu.up(key,value);
+  this.kakuritu.up(key,value);
  }
 }
