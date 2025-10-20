@@ -42,6 +42,7 @@
    margin: auto;
    margin-top: 10px;
    width: 450px;
+   height: 100px;
    background-color: brown;
    box-shadow: inset 4px 4px 20px rgba(0,0,0,0.5);
    border: 9px solid transparent;
@@ -59,25 +60,50 @@
   #multiplier{
     width: 100px;
     padding: 10px 20px;
-    border: 10px solid rgba(151, 151, 79, 0.534);
+    border: 5px solid rgba(151, 151, 79);
     box-shadow: 1px 1px 20px rgba(0,0,0,0.6);
     border-radius: 10px;
 
-    animation: rainbow 0.3s infinite;
+    animation: normal_color 1s infinite;
   }
 
   @keyframes rainbow {
-    0%   { background-color: red; font-size: 15px;}
-    14%  { background-color: orange; font-size: 17px;}
-    28%  { background-color: yellow; font-size: 18px; }
-    42%  { background-color: green; font-size: 19px; }
-    57%  { background-color: blue; font-size: 20px; }
-    71%  { background-color: indigo; font-size: 19px; }
-    85%  { background-color: violet; font-size: 18px; }
-    100% { background-color: red; font-size: 17px; } /* ループのために戻す */
+    0%   { background-color: red;}
+    14%  { background-color: orange;}
+    28%  { background-color: yellow;}
+    42%  { background-color: green;}
+    57%  { background-color: blue;}
+    71%  { background-color: indigo;}
+    85%  { background-color: violet;}
+    100% { background-color: red;} /* ループのために戻す */
   }
-  @keyframes normal {
+  @keyframes normal_color {
+    0% {background-color: white;}
+    50% {background-color: white;}
     100% { background-color: white; }
+  }
+  @keyframes super_color {
+    50% {background-color: rgb(96, 247, 54);}
+    100% {background-color: gold;}
+  }
+  @keyframes hyper_color {
+    22% {background-color: red;}
+    44% {background-color: rgb(237, 45, 180);}
+    66% {background-color: red;}
+    88% {background-color: rgb(255, 162, 0);}
+    100% {background-color: rgb(255, 119, 0);}
+  }
+  @keyframes ultra_color {
+    10% {background-color: rgb(255, 255, 255);}
+    20% {background-color: rgb(237, 15, 15);}
+    30% {background-color: rgb(255, 255, 255);}
+    40% {background-color: rgb(229, 255, 0);}
+    50% {background-color: rgb(255, 255, 255);}
+    60% {background-color: rgb(0, 255, 94);}
+    70% {background-color: rgb(255, 255, 255);}
+    80% {background-color: rgb(0, 187, 255);}
+    90% {background-color: rgb(255, 255, 255);}
+    100% {background-color: rgb(162, 0, 255);}
   }
 
   /*ここから子役表示関連*/
@@ -208,6 +234,14 @@
     font-size: 35px;
    }
 
+   
+   #data_frame{
+    height: 120px;
+   }
+   #multiplier_message{
+    padding-top: 30px;
+   }
+
   }
   
  </style>
@@ -251,8 +285,8 @@
   </div>
   <div id="data_frame">
    <div class="data" id="text_message">回そう！</div>
-   <div class="data"><span id="pt_message">10000</span>pt</div>
-   <div id="multiplier_message"><span id="multiplier">aaa</span></div>
+   <div class="data"><span id="pt_message">1000</span>pt</div>
+   <div id="multiplier_message"><span id="multiplier">0倍</span></div>
   </div>
   <div id="slot_frame">
    <div class="slot" id="slot1">🍎</div>
@@ -355,7 +389,8 @@
   let button2 = document.getElementById("button2"); //リール２に対するリール停止ボタンをbutton2とする
   let button3 = document.getElementById("button3"); //リール３に対するリール停止ボタンをbutton3とする
   const symbols = ["🍎","🍌","🍇","🍒","🍈","🍉","💎","😎"]; //スロットの子役（シンボル）
-  const point_symbols = { //シンボル事の付与ポイント数
+ //シンボル事の付与ポイント数
+  const point_symbols = {
    "🍎": 50,
    "🍌": 50,
    "🍇": 60,
@@ -365,7 +400,8 @@
    "💎": 1000,
    "😎": 10000
   };
-  const kakuritu_parameter = { //Kakuritu_controllerで必要とする確率パラメーター。数値が大きいシンボルほど出現割合が大きい
+ //Kakuritu_controllerで必要とする確率パラメーター。数値が大きいシンボルほど出現割合が大きい
+  const kakuritu_parameter = {
    "🍎": 100,
    "🍌": 100,
    "🍇": 100,
@@ -407,6 +443,7 @@
   //レバーオン時
   rever.addEventListener("click",() => {
     pointHelpFlag = true;
+    twicePoint();
    if(usePoint(5)){
     slot.pushed_rever();
     upDate();
@@ -438,6 +475,7 @@
     //Enterキーでレバーオン機能
     if(event.code == 'Enter') {
       pointHelpFlag = true;
+      twicePoint();
       if(usePoint(5)){
         slot.pushed_rever();
         upDate();
@@ -465,10 +503,12 @@
       if(pointHelpFlag == false){
         count += 1;
         document.getElementById("text_message").textContent = compareMessage(slot.getReview());
-        
-        document.getElementById("pt_message").textContent = Number(document.getElementById("pt_message").textContent) + Number(slot.getPoint(symbol));
+        let twicePoint = document.getElementById("multiplier").textContent;
+        twicePoint = twicePoint.match(/\d+/);
+        document.getElementById("pt_message").textContent = (Number(document.getElementById("pt_message").textContent) + Number(slot.getPoint(symbol)) * Number(twicePoint));
         console.log("getPoint is:" + slot.getPoint(symbol));
-        tableAddPoint(symbol,Number(slot.getPoint(symbol)));
+        tableAddPoint(symbol,Number(Number(slot.getPoint(symbol)) * twicePoint));
+        console.log("pt : " + tableAddPoint(symbol,Number(slot.getPoint(symbol))));
       }
     }
    },500);
@@ -556,6 +596,32 @@
     }
     return Math.floor((mySymbolValue / total) * 100);
   }
+
+  //レバーオンするほど倍率が+1される
+  function twicePoint(flag=true) {
+    if(flag==true){
+
+      let multiplier_text = document.getElementById("multiplier").textContent;
+      let multiplier = Number(multiplier_text.match(/\d+/));
+      let newValue = multiplier + 1.0;
+      let backText = "倍";
+        if(slot.slot_finish() || multiplier == "" || multiplier == null){
+          document.getElementById("multiplier").textContent = String(1.0) + backText;
+          document.getElementById("multiplier").style.animation = "normal_color 1s infinite";
+        }else if(!slot.slot_finish()){
+          document.getElementById("multiplier").textContent = String(newValue) + backText;
+          if(newValue > 100){
+            document.getElementById("multiplier").style.animation = "rainbow 1s infinite";
+          }else if(newValue > 50){
+            document.getElementById("multiplier").style.animation = "ultra_color 1s infinite";
+          }else if(newValue > 25){
+            document.getElementById("multiplier").style.animation = "hyper_color 1s infinite";
+          }else if(newValue > 5){
+            document.getElementById("multiplier").style.animation = "super_color 1s infinite";
+          }
+        }
+    }
+  } 
 
   //----------ステータステキストの数値反映----------//
 
